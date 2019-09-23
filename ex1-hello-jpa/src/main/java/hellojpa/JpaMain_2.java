@@ -43,6 +43,7 @@ public class JpaMain_2 {
             // Remove는 실제 DB에 데이터 삭제 요청
 //            em.remove(member);
 
+            // --------------------------------------------------------------------------------------------------------
             // 1차 캐시와 엔티티 동일성 비교
 //            Member a = em.find(Member.class, 1L);
 //            System.out.println("a.name = " + a.getName());
@@ -50,8 +51,26 @@ public class JpaMain_2 {
 //            System.out.println("b.name = " + b.getName());
 //            System.out.println(a == b); // 동일성 비교 True
 
-            
+            // --------------------------------------------------------------------------------------------------------
+//            Member member1 = new Member(170L, "C");
+//            Member member2 = new Member(180L, "D");
+//
+//            // Query를 한 번 한 번 수행하는게 아니라 한 번에 보내는 방법은 persistence.xml에 batch_size Option을 주면 된다.
+//            // batch_size Option을 주면 옵션에 준 사이즈만큼 모아서 한 번에 쿼리를 보내게 된다.
+//            em.persist(member1);
+//            em.persist(member2);
+//            System.out.println("===================");
 
+            // --------------------------------------------------------------------------------------------------------
+            // JPA의 목적은 Java Collection처럼 다루기 위함이다. 즉 RDB의 패래다임과 Java의 OOP 패러다임 사이의 중간 역활을 하는 것.
+            // Update문에서 em.persist()는 아무런 의미 없는 로직이다.
+            Member member = em.find(Member.class, 150L);
+            member.setName("ZZZZZ");
+
+            // --------------------------------------------------------------------------------------------------------
+            // 삭제
+//            Member memberA = em.find(Member.class, 180L);
+//            em.remove(memberA);
 
             // Commit
             tx.commit();
