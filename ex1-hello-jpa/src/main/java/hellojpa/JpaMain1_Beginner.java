@@ -6,7 +6,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import java.util.List;
 
-public class JpaMain {
+public class JpaMain1_Beginner {
 
     public static void main(String[] args) {
         // 만드는 순간 데이터베이스와 연결됨. 딱 1개만 만들어야함.
