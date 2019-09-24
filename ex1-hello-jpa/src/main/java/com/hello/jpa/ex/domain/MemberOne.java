@@ -1,4 +1,4 @@
-package com.hello.jpa.model;
+package com.hello.jpa.ex.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

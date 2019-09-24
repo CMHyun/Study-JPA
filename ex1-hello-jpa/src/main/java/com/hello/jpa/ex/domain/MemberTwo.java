@@ -1,6 +1,6 @@
-package com.hello.jpa.model;
+package com.hello.jpa.ex.domain;
 
-import com.hello.jpa.value.RoleType;
+import com.hello.jpa.ex.value.RoleType;
 
 import javax.persistence.*;
 import java.math.BigDecimal;

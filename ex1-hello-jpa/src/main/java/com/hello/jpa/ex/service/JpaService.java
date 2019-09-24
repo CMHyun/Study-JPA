@@ -1,7 +1,9 @@
-package com.hello.jpa.service;
+package com.hello.jpa.ex.service;
 
-import com.hello.jpa.model.MemberOne;
-import com.hello.jpa.model.MemberThree;
+import com.hello.jpa.ex.domain.Member;
+import com.hello.jpa.ex.domain.MemberOne;
+import com.hello.jpa.ex.domain.MemberThree;
+import com.hello.jpa.ex.domain.Team;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -182,12 +184,71 @@ public class JpaService implements IJpa {
 
     @Override
     public void primaryKey(EntityManager em) {
-        MemberThree member = new MemberThree();
-        // Identity의 경우 ID 값을 설정하면 안된다.
-//        member.setId("ID_A");
-        member.setUsername("Test_A");
+//        MemberThree member = new MemberThree();
+//        // @ID Annotation만 있을 경우 Primary Key를 설정할 수 있다.
+////        member.setId("ID_A");
+//        member.setUsername("Test_A");
 
-        em.persist(member);
+//        System.out.println("====================");
+//        em.persist(member);
+//        System.out.println(member.getId());
+//        System.out.println("====================");
+
+
+        MemberThree member1 = new MemberThree();
+        member1.setUsername("Test_A");
+
+        MemberThree member2 = new MemberThree();
+        member2.setUsername("Test_B");
+
+        MemberThree member3 = new MemberThree();
+        member3.setUsername("Test_C");
+
+        System.out.println("====================");
+        em.persist(member1); // DB_SEQ = 1
+        em.persist(member2); // MEMORY
+        em.persist(member3); // MEMORY
+
+        System.out.println(member1.getId());
+        System.out.println(member2.getId());
+        System.out.println(member3.getId());
+
     }
+
+    @Override
+    public void tableModeling(EntityManager em) {
+        //팀 저장 
+//        Team team = new Team("test3");
+//        em.persist(team);
+
+//        Member member = new Member();
+//        member.setName("C");
+//        member.setTeam(team);
+//        em.persist(member);
+
+        // 이전 방식
+//        // 조회
+//        Member findMember = em.find(Member.class, member.getId());
+//
+//        // 연관관계가 없음
+//        Team findTeam = em.find(Team.class, team.getId());
+
+        // 나는 영속성 컨텍스트에서 1차 캐시로 가져온 정보 말고 DB의 진짜 쿼리를 보고 싶다.
+        // 현재 영속성 컨텍스트를 날리고 DB와 싱크를 맞추는 작업
+//        em.flush(); // 현재 영속성 컨텍스트의 쿼리를 날리고
+//        em.clear(); // 영속성 컨텍스트를 초기화
+
+        // 객체를 참조에 맞춰서
+        Member findMember = em.find(Member.class, 2L);
+        System.out.println("member_id: " + findMember.getId());
+
+        Team findTeam = em.find(Team.class, findMember.getTeam().getId());
+        System.out.println(findTeam.getName());
+
+        Team testTeam = em.find(Team.class, 3L);
+        findMember.setTeam(testTeam);
+
+    }
+
 
 }
