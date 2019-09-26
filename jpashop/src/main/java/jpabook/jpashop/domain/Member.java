@@ -1,6 +1,10 @@
 package jpabook.jpashop.domain;
 
+import com.sun.tools.corba.se.idl.constExpr.Or;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Member {
@@ -14,9 +18,15 @@ public class Member {
     private String street;
     private String zipcode;
 
+    // Member에 Orders를 넣는 것은 좋은 방식이 아니다.
+    @OneToMany(mappedBy = "member")
+    private List<Order> orders = new ArrayList<Order>();
+
     // Constructor
-    public Member(Long id, String name, String city, String street, String zipcode) {
-        this.id = id;
+    public Member() {
+    }
+
+    public Member(String name, String city, String street, String zipcode) {
         this.name = name;
         this.city = city;
         this.street = street;
@@ -42,5 +52,9 @@ public class Member {
 
     public String getZipcode() {
         return zipcode;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
     }
 }

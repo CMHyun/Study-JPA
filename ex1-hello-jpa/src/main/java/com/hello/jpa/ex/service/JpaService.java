@@ -218,13 +218,27 @@ public class JpaService implements IJpa {
     @Override
     public void tableModeling(EntityManager em) {
         //팀 저장 
-//        Team team = new Team("test3");
-//        em.persist(team);
+        Team team = new Team("TeamA");
+//        team.getMembers().add(member);
+        em.persist(team);
 
-//        Member member = new Member();
-//        member.setName("C");
+        //
+        Member member = new Member();
+        member.setName("MemberA");
 //        member.setTeam(team);
-//        em.persist(member);
+        member.changeTeam(team);
+        em.persist(member);
+
+
+        // 자주하는 실수!
+        // 연관관계의 주인에 값을 입력하지 않음
+        // 역방향(주인이 아닌 방향)만 연관관계 설정
+        // Team 객체에도 넣어줘야 할 것 같다는 객체지향적 사고는 당연히 맞다.
+        // 그리고 em.flush, em.clear를 하지않으면 1차캐시 즉 영속성 컨텍스트에 값이 남아있게 되고 Team의 members변수에는 아무것도 없어서
+        // members list를 호출해서 쓰는 부분에 Select문이 나가질 않는다.
+        // 양방향 연관관계에서는 양쪽에 값을 넣어주는 것이 맞다!!!!
+//        team.getMembers().add(member); // 이 코드는 Member의 team setter에서
+
 
         // 이전 방식
 //        // 조회
@@ -235,20 +249,34 @@ public class JpaService implements IJpa {
 
         // 나는 영속성 컨텍스트에서 1차 캐시로 가져온 정보 말고 DB의 진짜 쿼리를 보고 싶다.
         // 현재 영속성 컨텍스트를 날리고 DB와 싱크를 맞추는 작업
-//        em.flush(); // 현재 영속성 컨텍스트의 쿼리를 날리고
-//        em.clear(); // 영속성 컨텍스트를 초기화
+        em.flush(); // 현재 영속성 컨텍스트의 쿼리를 날리고
+        em.clear(); // 영속성 컨텍스트를 초기화
 
         // 객체를 참조에 맞춰서
-        Member findMember = em.find(Member.class, 2L);
-        System.out.println("member_id: " + findMember.getId());
+//        Member findMember = em.find(Member.class, 2L);
+//        System.out.println("member_id: " + findMember.getId());
 
-        Team findTeam = em.find(Team.class, findMember.getTeam().getId());
-        System.out.println(findTeam.getName());
+//        Team findTeam = em.find(Team.class, findMember.getTeam().getId());
+//        System.out.println(findTeam.getName());
+//
+//        Team testTeam = em.find(Team.class, 3L);
+//        findMember.setTeam(testTeam);
 
-        Team testTeam = em.find(Team.class, 3L);
-        findMember.setTeam(testTeam);
+        // --------------------------------------------------------------------
+
+        Member findMember = em.find(Member.class, member.getId());
+        List<Member> members = findMember.getTeam().getMembers();
+
+        for (Member m: members) {
+            System.out.println(m.getName());
+        }
 
     }
+
+
+
+    // ManyToOne
+
 
 
 }

@@ -47,5 +47,15 @@ public class Member {
 
     public void setTeam(Team team) {
         this.team = team;
+
+        // 연관관계 편의 메소드
+        // 여기에서의 this는 Member 자신
+        team.getMembers().add(this);
+    }
+
+    // Getter Setter 관례가 아니라 직관적으로 알 수 있게 이름을 다른 방식으로
+    public void changeTeam(Team team) {
+        this.team = team;
+        team.getMembers().add(this);
     }
 }
